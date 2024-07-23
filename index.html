@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Poll</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+        .poll-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .poll-container h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .option {
+            margin: 10px 0;
+            padding: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .option:hover {
+            background: #d4d4d4;
+        }
+        .result {
+            background: #4caf50;
+            border-radius: 5px;
+            padding: 10px;
+            color: white;
+            margin: 5px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .new-poll-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .new-poll-container input, .new-poll-container button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .new-poll-container button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .new-poll-container button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="poll-container" id="poll1">
+        <h1>What's your favorite aspect of our company?</h1>
+        <div class="option" data-question="poll1" data-value="option1">Work Environment</div>
+        <div class="option" data-question="poll1" data-value="option2">Team Collaboration</div>
+        <div class="option" data-question="poll1" data-value="option3">Career Opportunities</div>
+        <div class="option" data-question="poll1" data-value="option4">Company Culture</div>
+
+        <div id="results_poll1" class="hidden">
+            <h2>Results:</h2>
+            <div class="result" id="result_poll1_option1"></div>
+            <div class="result" id="result_poll1_option2"></div>
+            <div class="result" id="result_poll1_option3"></div>
+            <div class="result" id="result_poll1_option4"></div>
+        </div>
+    </div>
+
+    <div class="poll-container" id="poll2">
+        <h1>How satisfied are you with your work-life balance?</h1>
+        <div class="option" data-question="poll2" data-value="option1">Very Satisfied</div>
+        <div class="option" data-question="poll2" data-value="option2">Satisfied</div>
+        <div class="option" data-question="poll2" data-value="option3">Neutral</div>
+        <div class="option" data-question="poll2" data-value="option4">Dissatisfied</div>
+
+        <div id="results_poll2" class="hidden">
+            <h2>Results:</h2>
+            <div class="result" id="result_poll2_option1"></div>
+            <div class="result" id="result_poll2_option2"></div>
+            <div class="result" id="result_poll2_option3"></div>
+            <div class="result" id="result_poll2_option4"></div>
+        </div>
+    </div>
+
+    <div class="poll-container" id="poll3">
+        <h1>What do you think about our health benefits?</h1>
+        <div class="option" data-question="poll3" data-value="option1">Excellent</div>
+        <div class="option" data-question="poll3" data-value="option2">Good</div>
+        <div class="option" data-question="poll3" data-value="option3">Fair</div>
+        <div class="option" data-question="poll3" data-value="option4">Poor</div>
+
+        <div id="results_poll3" class="hidden">
+            <h2>Results:</h2>
+            <div class="result" id="result_poll3_option1"></div>
+            <div class="result" id="result_poll3_option2"></div>
+            <div class="result" id="result_poll3_option3"></div>
+            <div class="result" id="result_poll3_option4"></div>
+        </div>
+    </div>
+
+    <div class="poll-container" id="poll4">
+        <h1>Which company value do you align with most?</h1>
+        <div class="option" data-question="poll4" data-value="option1">Integrity</div>
+        <div class="option" data-question="poll4" data-value="option2">Innovation</div>
+        <div class="option" data-question="poll4" data-value="option3">Excellence</div>
+        <div class="option" data-question="poll4" data-value="option4">Customer Centricity</div>
+
+        <div id="results_poll4" class="hidden">
+            <h2>Results:</h2>
+            <div class="result" id="result_poll4_option1"></div>
+            <div class="result" id="result_poll4_option2"></div>
+            <div class="result" id="result_poll4_option3"></div>
+            <div class="result" id="result_poll4_option4"></div>
+        </div>
+    </div>
+
+    <div class="new-poll-container">
+        <h1>Create a New Poll</h1>
+        <input type="text" id="newPollQuestion" placeholder="Enter your question">
+        <input type="text" class="newOption" placeholder="Option 1">
+        <input type="text" class="newOption" placeholder="Option 2">
+        <input type="text" class="newOption" placeholder="Option 3">
+        <input type="text" class="newOption" placeholder="Option 4">
+        <button id="createPoll">Create Poll</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const polls = ['poll1', 'poll2', 'poll3', 'poll4'];
+            let pollData = JSON.parse(localStorage.getItem('pollData')) || {
+                poll1: { option1: 0, option2: 0, option3: 0, option4: 0, totalVotes: 0 },
+                poll2: { option1: 0, option2: 0, option3: 0, option4: 0, totalVotes: 0 },
+                poll3: { option1: 0, option2: 0, option3: 0, option4: 0, totalVotes: 0 },
+                poll4: { option1: 0, option2: 0, option3: 0, option4: 0, totalVotes: 0 }
+            };
+
+            function updateResults(question) {
+                const resultsContainer = document.getElementById(`results_${question}`);
+                const totalVotes = pollData[question].totalVotes;
+                for (const [key, value] of Object.entries(pollData[question])) {
+                    if (key !== 'totalVotes') {
+                        const resultElement = document.getElementById(`result_${question}_${key}`);
+                        const percentage = totalVotes ? (value / totalVotes * 100).toFixed(2) : 0;
+                        resultElement.textContent = `${key.replace('option', 'Option ')}: ${percentage}% (${value} votes)`;
+                    }
+                }
+                resultsContainer.classList.remove('hidden');
+            }
+
+            polls.forEach(poll => {
+                const options = document.querySelectorAll(`#${poll} .option`);
+                options.forEach(option => {
+                    option.addEventListener('click', function () {
+                        const selectedOption = this.getAttribute('data-value');
+                        pollData[poll][selectedOption]++;
+                        pollData[poll].totalVotes++;
+                        localStorage.setItem('pollData', JSON.stringify(pollData));
+                        updateResults(poll);
+                    });
+                });
+
+                if (pollData[poll].totalVotes > 0) {
+                    updateResults(poll);
+                }
+            });
+
+            document.getElementById('createPoll').addEventListener('click', function () {
+                const newQuestion = document.getElementById('newPollQuestion').value;
+                const newOptions = Array.from(document.getElementsByClassName('newOption')).map(input => input.value);
+
+                if (newQuestion && newOptions.every(option => option)) {
+                    const newPollId = `poll${polls.length + 1}`;
+                    pollData[newPollId] = { option1: 0, option2: 0, option3: 0, option4: 0, totalVotes: 0 };
+                    localStorage.setItem('pollData', JSON.stringify(pollData));
+
+                    const newPollContainer = document.createElement('div');
+                    newPollContainer.className = 'poll-container';
+                    newPollContainer.id = newPollId;
+                    newPollContainer.innerHTML = `
+                        <h1>${newQuestion}</h1>
+                        <div class="option" data-question="${newPollId}" data-value="option1">${newOptions[0]}</div>
+                        <div class="option" data-question="${newPollId}" data-value="option2">${newOptions[1]}</div>
+                        <div class="option" data-question="${newPollId}" data-value="option3">${newOptions[2]}</div>
+                        <div class="option" data-question="${newPollId}" data-value="option4">${newOptions[3]}</div>
+                        <div id="results_${newPollId}" class="hidden">
+                            <h2>Results:</h2>
+                            <div class="result" id="result_${newPollId}_option1"></div>
+                            <div class="result" id="result_${newPollId}_option2"></div>
+                            <div class="result" id="result_${newPollId}_option3"></div>
+                            <div class="result" id="result_${newPollId}_option4"></div>
+                        </div>
+                    `;
+                    document.body.insertBefore(newPollContainer, document.querySelector('.new-poll-container'));
+
+                    polls.push(newPollId);
+                    const newOptionsElements = document.querySelectorAll(`#${newPollId} .option`);
+                    newOptionsElements.forEach(option => {
+                        option.addEventListener('click', function () {
+                            const selectedOption = this.getAttribute('data-value');
+                            pollData[newPollId][selectedOption]++;
+                            pollData[newPollId].totalVotes++;
+                            localStorage.setItem('pollData', JSON.stringify(pollData));
+                            updateResults(newPollId);
+                        });
+                    });
+
+                    document.getElementById('newPollQuestion').value = '';
+                    document.querySelectorAll('.newOption').forEach(input => input.value = '');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
